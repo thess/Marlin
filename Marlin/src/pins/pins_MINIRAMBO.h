@@ -87,7 +87,9 @@
 #ifndef MOTOR_CURRENT_PWM_RANGE
   #define MOTOR_CURRENT_PWM_RANGE 2000
 #endif
-#define DEFAULT_PWM_MOTOR_CURRENT  {1300, 1300, 1250}
+#define DEFAULT_PWM_MOTOR_CURRENT  {270, 830, 450} // {XY,Z,E}
+#define DEFAULT_PWM_MOTOR_CURRENT_LOUD  {540, 830, 500} // {XY,Z,E}
+#define PWM_MOTOR_CURRENT DEFAULT_PWM_MOTOR_CURRENT_LOUD
 
 //
 // Temperature Sensors
@@ -101,15 +103,24 @@
 //
 #define HEATER_0_PIN        3
 #define HEATER_1_PIN        7
+#if !defined(PRUSA3D_MK2S)
 #if !MB(MINIRAMBO_10A)
   #define HEATER_2_PIN      6
 #endif
+#else
+#define HEATER_2_PIN        -1
+#endif
 #define HEATER_BED_PIN      4
 
+#if !defined(PRUSA3D_MK2S)
 #ifndef FAN_PIN
   #define FAN_PIN           8
 #endif
 #define FAN1_PIN            6
+#else
+#define FAN_PIN             6
+#define FAN1_PIN            -1
+#endif
 
 //
 // Misc. Functions

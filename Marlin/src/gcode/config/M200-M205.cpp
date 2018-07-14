@@ -91,27 +91,21 @@ void GcodeSuite::M203() {
  *    T = Travel (non printing) moves
  */
 void GcodeSuite::M204() {
-  bool report = true;
-  if (parser.seenval('S')) { // Kept for legacy compatibility. Should NOT BE USED for new developments.
+  if (parser.seen('S')) {  // Kept for legacy compatibility. Should NOT BE USED for new developments.
     planner.travel_acceleration = planner.acceleration = parser.value_linear_units();
-    report = false;
+    //SERIAL_ECHOLNPAIR("Setting Print and Travel Acceleration: ", planner.acceleration);
   }
-  if (parser.seenval('P')) {
+  if (parser.seen('P')) {
     planner.acceleration = parser.value_linear_units();
-    report = false;
+    //SERIAL_ECHOLNPAIR("Setting Print Acceleration: ", planner.acceleration);
   }
-  if (parser.seenval('R')) {
+  if (parser.seen('R')) {
     planner.retract_acceleration = parser.value_linear_units();
-    report = false;
+    //SERIAL_ECHOLNPAIR("Setting Retract Acceleration: ", planner.retract_acceleration);
   }
-  if (parser.seenval('T')) {
+  if (parser.seen('T')) {
     planner.travel_acceleration = parser.value_linear_units();
-    report = false;
-  }
-  if (report) {
-    SERIAL_ECHOPAIR("Acceleration: P", planner.acceleration);
-    SERIAL_ECHOPAIR(" R", planner.retract_acceleration);
-    SERIAL_ECHOLNPAIR(" T", planner.travel_acceleration);
+    //SERIAL_ECHOLNPAIR("Setting Travel Acceleration: ", planner.travel_acceleration);
   }
 }
 

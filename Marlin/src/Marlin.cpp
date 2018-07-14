@@ -829,6 +829,10 @@ void setup() {
     SET_INPUT_PULLUP(HOME_PIN);
   #endif
 
+  #if defined(PRUSA3D_MK2S)
+    enable_Z();
+  #endif
+
   #if PIN_EXISTS(STAT_LED_RED)
     OUT_WRITE(STAT_LED_RED_PIN, LOW); // turn it off
   #endif

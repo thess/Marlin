@@ -68,8 +68,12 @@ void manage_inactivity(const bool ignore_stepper_queue=false);
   #define  enable_Z() do{ Z_ENABLE_WRITE( Z_ENABLE_ON); Z2_ENABLE_WRITE(Z_ENABLE_ON); }while(0)
   #define disable_Z() do{ Z_ENABLE_WRITE(!Z_ENABLE_ON); Z2_ENABLE_WRITE(!Z_ENABLE_ON); CBI(axis_known_position, Z_AXIS); }while(0)
 #elif HAS_Z_ENABLE
-  #define  enable_Z() Z_ENABLE_WRITE( Z_ENABLE_ON)
-  #define disable_Z() do{ Z_ENABLE_WRITE(!Z_ENABLE_ON); CBI(axis_known_position, Z_AXIS); }while(0)
+  #define    enable_Z() Z_ENABLE_WRITE( Z_ENABLE_ON)
+  #if !defined(PRUSA3D_MK2S)
+    #define disable_Z() do{ Z_ENABLE_WRITE(!Z_ENABLE_ON); CBI(axis_known_position, Z_AXIS); }while(0)
+  #else
+    #define disable_Z() NOOP
+  #endif
 #else
   #define  enable_Z() NOOP
   #define disable_Z() NOOP
