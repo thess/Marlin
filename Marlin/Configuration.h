@@ -400,9 +400,9 @@
   //#define DEFAULT_Kd 440
 
   // Prusa i3 MK2S
-  #define  DEFAULT_Kp 40.925
-  #define  DEFAULT_Ki 4.875
-  #define  DEFAULT_Kd 86.085
+  #define  DEFAULT_Kp 14.33
+  #define  DEFAULT_Ki 1.01
+  #define  DEFAULT_Kd 50.77
 
 #endif // PIDTEMP
 
@@ -452,9 +452,9 @@
   //#define DEFAULT_bedKd 1675.16
 
   // Prusa i3 MK2S
-  #define  DEFAULT_bedKp 126.13
-  #define  DEFAULT_bedKi 4.30
-  #define  DEFAULT_bedKd 924.76
+  #define  DEFAULT_bedKp 74.98
+  #define  DEFAULT_bedKi 3.01
+  #define  DEFAULT_bedKd 466.84
 
 
   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
@@ -779,9 +779,9 @@
  *      O-- FRONT --+
  *    (0,0)
  */
-#define X_PROBE_OFFSET_FROM_EXTRUDER 23    // X offset: -left  +right  [of the nozzle]
-#define Y_PROBE_OFFSET_FROM_EXTRUDER 9	   // Y offset: -front +behind [the nozzle]
-#define Z_PROBE_OFFSET_FROM_EXTRUDER .5f   // Z offset: -below +above  [the nozzle]
+#define X_PROBE_OFFSET_FROM_EXTRUDER 23     // X offset: -left  +right  [of the nozzle]
+#define Y_PROBE_OFFSET_FROM_EXTRUDER 9      // Y offset: -front +behind [the nozzle]
+#define Z_PROBE_OFFSET_FROM_EXTRUDER -0.5   // Z offset: -below +above  [the nozzle]
 
 // Certain types of probes need to stay away from edges
 //#define MIN_PROBE_EDGE 10
@@ -1034,10 +1034,13 @@
   //#define BACK_PROBE_BED_POSITION (Y_BED_SIZE - MIN_PROBE_EDGE)
 
   // Prusa i3 MK2S
-  #define LEFT_PROBE_BED_POSITION (X_PROBE_OFFSET_FROM_EXTRUDER + 12)
-  #define RIGHT_PROBE_BED_POSITION (X_PROBE_OFFSET_FROM_EXTRUDER + 215)
-  #define FRONT_PROBE_BED_POSITION (Y_PROBE_OFFSET_FROM_EXTRUDER - 2)
-  #define BACK_PROBE_BED_POSITION (Y_PROBE_OFFSET_FROM_EXTRUDER + 194)
+  #define LEFT_PROBE_BED_POSITION	(X_PROBE_OFFSET_FROM_EXTRUDER + 13)
+  #define RIGHT_PROBE_BED_POSITION	(X_PROBE_OFFSET_FROM_EXTRUDER + 215)
+  #define FRONT_PROBE_BED_POSITION	(Y_PROBE_OFFSET_FROM_EXTRUDER - 2)
+  #define BACK_PROBE_BED_POSITION	(Y_PROBE_OFFSET_FROM_EXTRUDER + 194)
+  // These also define min/max probe limits
+  #define MIN_PROBE_X	LEFT_PROBE_BED_POSITION
+  #define MIN_PROBE_Y	FRONT_PROBE_BED_POSITION
 
   // Probe along the Y axis, advancing X after each column
   //#define PROBE_Y_FIRST
@@ -1128,7 +1131,9 @@
  * Commands to execute at the end of G29 probing.
  * Useful to retract or move the Z probe out of the way.
  */
-//#define Z_PROBE_END_SCRIPT "G1 Z10 F12000\nG1 X15 Y330\nG1 Z0.5\nG1 Z10"
+// For Prusa MK2S - This moves the nozzle back to home after MBL (without z-probe)
+// Compatible with PRUSA G80 go_home_with_z_lift()
+#define Z_PROBE_END_SCRIPT "G1 Z5 F12000\nG1 X0.2 Y-2.0\nG1 Z0.15"
 
 
 // @section homing
@@ -1138,9 +1143,9 @@
 
 // Manually set the home position. Leave these undefined for automatic settings.
 // For DELTA this is the top-center of the Cartesian print volume.
-#define MANUAL_X_HOME_POS 0
-#define MANUAL_Y_HOME_POS -2.2
-#define MANUAL_Z_HOME_POS 0.15
+//#define MANUAL_X_HOME_POS 0
+//#define MANUAL_Y_HOME_POS 0
+//#define MANUAL_Z_HOME_POS 0
 
 // Use "Z Safe Homing" to avoid homing with a Z probe outside the bed area.
 //
@@ -1151,11 +1156,13 @@
 // - Move the Z probe (or nozzle) to a defined XY point before Z Homing when homing all axes (G28).
 // - Prevent Z homing when the Z probe is outside bed area.
 //
-//#define Z_SAFE_HOMING
+#define Z_SAFE_HOMING
 
 #if ENABLED(Z_SAFE_HOMING)
-  #define Z_SAFE_HOMING_X_POINT ((X_BED_SIZE) / 2)    // X point for Z homing when homing all axes (G28).
-  #define Z_SAFE_HOMING_Y_POINT ((Y_BED_SIZE) / 2)    // Y point for Z homing when homing all axes (G28).
+  //#define Z_SAFE_HOMING_X_POINT ((X_BED_SIZE) / 2)    // X point for Z homing when homing all axes (G28).
+  //#define Z_SAFE_HOMING_Y_POINT ((Y_BED_SIZE) / 2)    // Y point for Z homing when homing all axes
+  #define Z_SAFE_HOMING_X_POINT LEFT_PROBE_BED_POSITION    // X point for Z homing on MK2S
+  #define Z_SAFE_HOMING_Y_POINT FRONT_PROBE_BED_POSITION   // Y point for Z homing on MK2S
 #endif
 
 // Homing speeds (mm/m)
